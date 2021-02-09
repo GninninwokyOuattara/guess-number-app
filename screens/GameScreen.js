@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, Alert } from "react-native";
 import Card from "../components/Card";
 import NumberContainer from "../components/NumberContainer";
 
@@ -22,7 +22,7 @@ const reArrangeArray = (arr, min = 0, max = arr.length) => {
     return arr.slice(min, max);
 };
 
-const GameScreen = () => {
+const GameScreen = (props) => {
     console.log(
         "[",
         guessArray[0],
@@ -35,13 +35,21 @@ const GameScreen = () => {
 
     const takeAGuess = (type) => {
         if (guessArray.length > 1) {
-            if (type === "lower") {
+            if (type === "lower" && props.userChoice < guess) {
                 guessArray = reArrangeArray(guessArray, 0, randomChoice);
-            } else {
+                setRandomChoice(randomIndex(guessArray));
+            } else if (type === "higher" && props.userChoice > guess) {
                 guessArray = reArrangeArray(
                     guessArray,
                     randomChoice + 1,
                     guessArray.length
+                );
+                setRandomChoice(randomIndex(guessArray));
+            } else {
+                Alert.alert(
+                    "DON'T CHEAT",
+                    "You know something ain't right...",
+                    [{ text: "Sorry", style: "cancel" }]
                 );
             }
         } else {
@@ -59,20 +67,20 @@ const GameScreen = () => {
     return (
         <View style={styles.container}>
             <Text>Opponent's guess : </Text>
-            <NumberContainer>{guess}</NumberContainer>
+            <NumberContainer style={styles.numberGuessed}>
+                {guess}
+            </NumberContainer>
             <Card style={styles.card}>
                 <Button
                     title={"Lower"}
                     onPress={() => {
                         takeAGuess("lower");
-                        setRandomChoice(randomIndex(guessArray));
                     }}
                 />
                 <Button
                     title={"Higher"}
                     onPress={() => {
                         takeAGuess("higher");
-                        setRandomChoice(randomIndex(guessArray));
                     }}
                 />
             </Card>
@@ -96,6 +104,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center",
+    },
+
+    numberGuessed: {
+        borderRadius: 10,
+        // width: 50,
     },
 });
 
