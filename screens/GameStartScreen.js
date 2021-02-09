@@ -11,11 +11,14 @@ import {
 } from "react-native";
 import Card from "../components/Card";
 import Input from "../components/Input";
+import NumberContainer from "../components/NumberContainer";
+
 import Color from "../constants/colors";
 
 const GameStartScreen = () => {
     const [enteredInput, setEnteredInput] = useState("");
     const [confirmed, setConfirmed] = useState(false);
+    const [selectedNumber, setSelectedNumber] = useState(null);
 
     const inputHandler = (inputText) => {
         setEnteredInput(inputText.replace(/[^0-9]/g, ""));
@@ -23,6 +26,7 @@ const GameStartScreen = () => {
 
     const resetHandler = () => {
         setEnteredInput("");
+        setSelectedNumber(null);
         setConfirmed(false);
     };
 
@@ -37,6 +41,9 @@ const GameStartScreen = () => {
             return;
         }
         setConfirmed(true);
+        setSelectedNumber(input);
+        setEnteredInput("");
+        Keyboard.dismiss();
     };
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -71,7 +78,13 @@ const GameStartScreen = () => {
                         </View>
                     </View>
                 </Card>
-                {confirmed && <Text>Chosen number : {enteredInput}</Text>}
+                {confirmed && (
+                    <Card style={styles.numberCard}>
+                        <Text>You selected : </Text>
+                        <NumberContainer>{selectedNumber}</NumberContainer>
+                        <Button title="START GAME" />
+                    </Card>
+                )}
             </View>
         </TouchableWithoutFeedback>
     );
@@ -93,13 +106,14 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
     },
 
-    // numberInput: {
-    //     borderWidth: 1,
-    //     width: 200,
-    //     height: 40,
-    //     marginVertical: 10,
-    //     paddingLeft: 10,
-    // },
+    numberCard: {
+        // borderWidth: 1,
+        width: 200,
+        // height: 100,
+        marginVertical: 10,
+        paddingVertical: 10,
+        alignItems: "center",
+    },
 
     buttonContainer: {
         width: 300,
