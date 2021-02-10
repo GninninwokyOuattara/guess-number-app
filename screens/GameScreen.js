@@ -104,7 +104,7 @@ const GameScreen = (props) => {
     }, [guess]);
 
     useEffect(() => {
-        if (guess !== pastGuesses[0].value) {
+        if (guess !== pastGuesses[0]?.value) {
             setPastGuesses((pastGuesses) => [
                 { value: guessArray[randomChoice], round: round },
                 ...pastGuesses,
@@ -147,14 +147,23 @@ const GameScreen = (props) => {
                     <Ionicons name="md-add" size={24} />
                 </MainButton>
             </Card>
-            <ScrollView style={styles.scrollView}>
-                {pastGuesses.map((pastGuess, index) => (
-                    <View key={pastGuess.round} style={styles.roundContainer}>
-                        <Text style={styles.roundText}>#{pastGuess.round}</Text>
-                        <Text style={styles.roundText}>{pastGuess.value}</Text>
-                    </View>
-                ))}
-            </ScrollView>
+            <View style={styles.scrollViewContainer}>
+                <ScrollView contentContainerStyle={styles.scrollView}>
+                    {pastGuesses.map((pastGuess, index) => (
+                        <View
+                            key={pastGuess.round}
+                            style={styles.roundContainer}
+                        >
+                            <Text style={styles.roundText}>
+                                #{pastGuess.round}
+                            </Text>
+                            <Text style={styles.roundText}>
+                                {pastGuess.value}
+                            </Text>
+                        </View>
+                    ))}
+                </ScrollView>
+            </View>
         </View>
     );
 };
@@ -182,11 +191,18 @@ const styles = StyleSheet.create({
         // width: 50,
     },
 
-    scrollView: {
+    scrollViewContainer: {
         flex: 1,
+        width: "80%",
+    },
+
+    scrollView: {
+        flexGrow: 1,
         // flexDirection: "row",
-        width: "75%",
-        marginVertical: 10,
+        // width: "75%",
+        // marginVertical: 15,
+        justifyContent: "flex-end",
+        alignItems: "center",
     },
 
     roundContainer: {
@@ -194,8 +210,8 @@ const styles = StyleSheet.create({
         height: 40,
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: "gray",
-        marginVertical: 5,
+        borderColor: "#ccc",
+        marginVertical: 10,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
