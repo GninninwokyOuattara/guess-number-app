@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
 import Card from "../components/Card";
 import NumberContainer from "../components/NumberContainer";
+import MainButton from "../components/MainButton";
+import { Ionicons } from "@expo/vector-icons";
 
 const generateGuessArray = () => {
     let arr = [];
@@ -84,18 +86,32 @@ const GameScreen = (props) => {
                 {guess}
             </NumberContainer>
             <Card style={styles.card}>
-                <Button
+                {/* <Button
                     title={"Lower"}
                     onPress={() => {
                         takeAGuess("lower");
                     }}
-                />
-                <Button
+                /> */}
+                <MainButton
+                    onPress={() => {
+                        takeAGuess("lower");
+                    }}
+                >
+                    <Ionicons name="md-remove" size={24} />
+                </MainButton>
+                {/* <Button
                     title={"Higher"}
                     onPress={() => {
                         takeAGuess("higher");
                     }}
-                />
+                /> */}
+                <MainButton
+                    onPress={() => {
+                        takeAGuess("higher");
+                    }}
+                >
+                    <Ionicons name="md-add" size={24} />
+                </MainButton>
             </Card>
         </View>
     );
