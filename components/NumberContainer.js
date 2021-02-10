@@ -5,7 +5,7 @@ import Color from "../constants/colors";
 
 const NumberContainer = (props) => {
     return (
-        <View style={styles.container}>
+        <View style={{ ...styles.container, ...props.style }}>
             <Text style={styles.number}>{props.children}</Text>
         </View>
     );

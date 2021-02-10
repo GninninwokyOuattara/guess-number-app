@@ -16,11 +16,12 @@ const randomIndex = (arr) => {
     return choiceIndex;
 };
 
-let guessArray = generateGuessArray();
-
 const reArrangeArray = (arr, min = 0, max = arr.length) => {
     return arr.slice(min, max);
 };
+let guessArray = generateGuessArray();
+
+let randomChoice = randomIndex(guessArray);
 
 const GameScreen = (props) => {
     console.log(
@@ -30,21 +31,27 @@ const GameScreen = (props) => {
         guessArray[guessArray.length - 1],
         "]"
     );
-    const [randomChoice, setRandomChoice] = useState(randomIndex(guessArray));
-    const [guess, setGuess] = useState();
+    // const [randomChoice, setRandomChoice] = useState(randomIndex(guessArray));
+
+    const { userChoice, onGameOver, onGameRound } = props;
+    const [guess, setGuess] = useState(guessArray[randomChoice]);
 
     const takeAGuess = (type) => {
         if (guessArray.length > 1) {
-            if (type === "lower" && props.userChoice < guess) {
+            if (type === "lower" && userChoice < guess) {
                 guessArray = reArrangeArray(guessArray, 0, randomChoice);
-                setRandomChoice(randomIndex(guessArray));
-            } else if (type === "higher" && props.userChoice > guess) {
+                randomChoice = randomIndex(guessArray);
+                setGuess(guessArray[randomChoice]);
+                onGameRound((round) => (round += 1));
+            } else if (type === "higher" && userChoice > guess) {
                 guessArray = reArrangeArray(
                     guessArray,
                     randomChoice + 1,
                     guessArray.length
                 );
-                setRandomChoice(randomIndex(guessArray));
+                randomChoice = randomIndex(guessArray);
+                setGuess(guessArray[randomChoice]);
+                onGameRound((round) => (round += 1));
             } else {
                 Alert.alert(
                     "DON'T CHEAT",
@@ -58,11 +65,17 @@ const GameScreen = (props) => {
     };
 
     useEffect(() => {
-        setGuess(guessArray[randomChoice]);
+        if (guess === userChoice) {
+            guessArray = generateGuessArray();
+            randomChoice = randomIndex(guessArray);
+            // setGuess(-1);
+            onGameOver(true);
+            console.log("Game Over");
+        }
         // return () => {
-        //     cleanup;
+        //     setGuess(() => false);
         // };
-    }, [randomChoice]);
+    }, [guess]);
 
     return (
         <View style={styles.container}>
