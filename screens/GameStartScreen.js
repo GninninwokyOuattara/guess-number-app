@@ -14,6 +14,7 @@ import Input from "../components/Input";
 import NumberContainer from "../components/NumberContainer";
 
 import Color from "../constants/colors";
+import defaultStyles from "../constants/default-styles";
 
 const GameStartScreen = (props) => {
     const [enteredInput, setEnteredInput] = useState("");

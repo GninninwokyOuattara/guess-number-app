@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import GameStartScreen from "./screens/GameStartScreen";
 import GameScreen from "./screens/GameScreen";
 import GameOverScreen from "./screens/GameOverScreen";
+import defaultStyles from "./constants/default-styles";
 
 const fetchFont = () => {
     return Font.loadAsync({
@@ -70,7 +71,7 @@ export default function App() {
     }
     return (
         <View style={styles.screen}>
-            <Header title="Guess a Number" />
+            <Header style={defaultStyles.title} title="Guess a Number" />
             {content}
         </View>
     );
