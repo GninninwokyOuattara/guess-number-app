@@ -20,7 +20,7 @@ const fetchFont = () => {
 export default function App() {
     const [userChoice, setUserChoice] = useState(false);
     const [gameStart, setGameStart] = useState(false);
-    const [gameRound, setGameRound] = useState(0);
+    const [gameRound, setGameRound] = useState(1);
     const [gameOver, setGameOver] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +37,7 @@ export default function App() {
     let content;
 
     const newGameHandler = () => {
-        setGameRound(0);
+        setGameRound(1);
         setGameStart(false);
         setUserChoice(false);
         setGameOver(false);
@@ -65,6 +65,7 @@ export default function App() {
                     userChoice={userChoice}
                     onGameOver={setGameOver}
                     onGameRound={setGameRound}
+                    round={gameRound}
                 />
             );
         }

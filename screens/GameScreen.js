@@ -42,9 +42,9 @@ const GameScreen = (props) => {
     );
     // const [randomChoice, setRandomChoice] = useState(randomIndex(guessArray));
 
-    const { userChoice, onGameOver, onGameRound } = props;
+    const { userChoice, onGameOver, onGameRound, round } = props;
     const [guess, setGuess] = useState(guessArray[randomChoice]);
-    const [pastGuesses, setPastGuesses] = useState([guessArray[randomChoice]]);
+    const [pastGuesses, setPastGuesses] = useState([]);
 
     const takeAGuess = (type) => {
         if (guessArray.length > 1) {
@@ -53,10 +53,14 @@ const GameScreen = (props) => {
                 randomChoice = randomIndex(guessArray);
                 setGuess(guessArray[randomChoice]);
                 onGameRound((round) => (round += 1));
-                setPastGuesses((pastGuesses) => [
-                    guessArray[randomChoice],
-                    ...pastGuesses,
-                ]);
+                // setPastGuesses((pastGuesses) => [
+                //     guessArray[randomChoice],
+                //     ...pastGuesses,
+                // ]);
+                // setPastGuesses((pastGuesses) => [
+                //     { value: guessArray[randomChoice], round: round },
+                //     ...pastGuesses,
+                // ]);
             } else if (type === "higher" && userChoice > guess) {
                 guessArray = reArrangeArray(
                     guessArray,
@@ -65,11 +69,15 @@ const GameScreen = (props) => {
                 );
                 randomChoice = randomIndex(guessArray);
                 setGuess(guessArray[randomChoice]);
-                setPastGuesses((pastGuesses) => [
-                    guessArray[randomChoice],
-                    ...pastGuesses,
-                ]);
+                // setPastGuesses((pastGuesses) => [
+                //     guessArray[randomChoice],
+                //     ...pastGuesses,
+                // ]);
                 onGameRound((round) => (round += 1));
+                // setPastGuesses((pastGuesses) => [
+                //     { value: guessArray[randomChoice], round: round},
+                //     ...pastGuesses,
+                // ]);
             } else {
                 Alert.alert(
                     "DON'T CHEAT",
@@ -94,6 +102,16 @@ const GameScreen = (props) => {
         //     setGuess(() => false);
         // };
     }, [guess]);
+
+    useEffect(() => {
+        if (guess !== pastGuesses[0].value) {
+            setPastGuesses((pastGuesses) => [
+                { value: guessArray[randomChoice], round: round },
+                ...pastGuesses,
+            ]);
+        }
+        console.log(pastGuesses);
+    }, [round]);
 
     return (
         <View style={styles.container}>
@@ -129,10 +147,11 @@ const GameScreen = (props) => {
                     <Ionicons name="md-add" size={24} />
                 </MainButton>
             </Card>
-            <ScrollView>
-                {pastGuesses.map((pastGuess) => (
-                    <View>
-                        <Text>{pastGuess}</Text>
+            <ScrollView style={styles.scrollView}>
+                {pastGuesses.map((pastGuess, index) => (
+                    <View key={pastGuess.round} style={styles.roundContainer}>
+                        <Text style={styles.roundText}>#{pastGuess.round}</Text>
+                        <Text style={styles.roundText}>{pastGuess.value}</Text>
                     </View>
                 ))}
             </ScrollView>
@@ -142,7 +161,7 @@ const GameScreen = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 2,
+        flex: 1,
         // borderColor: "#000000",
         // borderWidth: 1,
         // width: "80%",
@@ -161,6 +180,26 @@ const styles = StyleSheet.create({
     numberGuessed: {
         borderRadius: 10,
         // width: 50,
+    },
+
+    scrollView: {
+        flex: 1,
+        // flexDirection: "row",
+        width: "75%",
+        marginVertical: 10,
+    },
+
+    roundContainer: {
+        width: "100%",
+        height: 40,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: "gray",
+        marginVertical: 5,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingHorizontal: 30,
     },
 });
 
