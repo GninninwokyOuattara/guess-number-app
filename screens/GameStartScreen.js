@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
 
     startGame: {
         fontSize: 20,
+        fontFamily: "open-sans-bold",
     },
 
     inputContainer: {
