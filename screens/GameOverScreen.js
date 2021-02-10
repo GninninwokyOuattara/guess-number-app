@@ -1,10 +1,25 @@
 import React from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, Image } from "react-native";
 
 const GameOverScreen = (props) => {
     return (
         <View style={styles.screen}>
             <Text>Game Over</Text>
+            <View style={styles.imageContainer}>
+                {/* <Image
+                    source={require("../assets/success.png")}
+                    style={styles.image}
+                    resizeMode="cover"
+                /> */}
+                <Image
+                    source={{
+                        uri:
+                            "https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_1920,f_auto/A-Alamy-BXWK5E_vvmkuf.jpg",
+                    }}
+                    style={styles.image}
+                    resizeMode="cover"
+                />
+            </View>
             <Text>In {props.roundNumber}</Text>
             <Text>The number was {props.number}</Text>
             <Button title="NEW GAME" onPress={props.onNewGame} />
@@ -19,6 +34,22 @@ const styles = {
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+    },
+
+    imageContainer: {
+        width: "80%",
+        height: 300,
+        borderWidth: 2,
+        borderRadius: 150,
+        overflow: "hidden",
+        marginVertical: 10,
+    },
+
+    image: {
+        // borderWidth: 10,
+        // borderColor: "black",
+        height: "100%",
+        width: "100%",
     },
 };
 
