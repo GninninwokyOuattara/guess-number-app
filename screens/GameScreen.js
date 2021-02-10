@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, StyleSheet, Alert } from "react-native";
+import {
+    View,
+    Text,
+    Button,
+    StyleSheet,
+    Alert,
+    ScrollView,
+} from "react-native";
 import Card from "../components/Card";
 import NumberContainer from "../components/NumberContainer";
 import MainButton from "../components/MainButton";
@@ -37,6 +44,7 @@ const GameScreen = (props) => {
 
     const { userChoice, onGameOver, onGameRound } = props;
     const [guess, setGuess] = useState(guessArray[randomChoice]);
+    const [pastGuesses, setPastGuesses] = useState([guessArray[randomChoice]]);
 
     const takeAGuess = (type) => {
         if (guessArray.length > 1) {
@@ -45,6 +53,10 @@ const GameScreen = (props) => {
                 randomChoice = randomIndex(guessArray);
                 setGuess(guessArray[randomChoice]);
                 onGameRound((round) => (round += 1));
+                setPastGuesses((pastGuesses) => [
+                    guessArray[randomChoice],
+                    ...pastGuesses,
+                ]);
             } else if (type === "higher" && userChoice > guess) {
                 guessArray = reArrangeArray(
                     guessArray,
@@ -53,6 +65,10 @@ const GameScreen = (props) => {
                 );
                 randomChoice = randomIndex(guessArray);
                 setGuess(guessArray[randomChoice]);
+                setPastGuesses((pastGuesses) => [
+                    guessArray[randomChoice],
+                    ...pastGuesses,
+                ]);
                 onGameRound((round) => (round += 1));
             } else {
                 Alert.alert(
@@ -113,6 +129,13 @@ const GameScreen = (props) => {
                     <Ionicons name="md-add" size={24} />
                 </MainButton>
             </Card>
+            <ScrollView>
+                {pastGuesses.map((pastGuess) => (
+                    <View>
+                        <Text>{pastGuess}</Text>
+                    </View>
+                ))}
+            </ScrollView>
         </View>
     );
 };
