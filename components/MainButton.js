@@ -25,6 +25,8 @@ const styles = StyleSheet.create({
     innerContainer: {
         // flexDirection: "row",
         // flex: 1,
+        minWidth: 80,
+        minHeight: 40,
         padding: 10,
         alignItems: "center",
         justifyContent: "center",
