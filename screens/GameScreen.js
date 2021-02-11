@@ -6,6 +6,7 @@ import {
     StyleSheet,
     Alert,
     ScrollView,
+    FlatList,
 } from "react-native";
 import Card from "../components/Card";
 import NumberContainer from "../components/NumberContainer";
@@ -40,7 +41,6 @@ const GameScreen = (props) => {
         guessArray[guessArray.length - 1],
         "]"
     );
-    // const [randomChoice, setRandomChoice] = useState(randomIndex(guessArray));
 
     const { userChoice, onGameOver, onGameRound, round } = props;
     const [guess, setGuess] = useState(guessArray[randomChoice]);
@@ -53,14 +53,6 @@ const GameScreen = (props) => {
                 randomChoice = randomIndex(guessArray);
                 setGuess(guessArray[randomChoice]);
                 onGameRound((round) => (round += 1));
-                // setPastGuesses((pastGuesses) => [
-                //     guessArray[randomChoice],
-                //     ...pastGuesses,
-                // ]);
-                // setPastGuesses((pastGuesses) => [
-                //     { value: guessArray[randomChoice], round: round },
-                //     ...pastGuesses,
-                // ]);
             } else if (type === "higher" && userChoice > guess) {
                 guessArray = reArrangeArray(
                     guessArray,
@@ -69,15 +61,8 @@ const GameScreen = (props) => {
                 );
                 randomChoice = randomIndex(guessArray);
                 setGuess(guessArray[randomChoice]);
-                // setPastGuesses((pastGuesses) => [
-                //     guessArray[randomChoice],
-                //     ...pastGuesses,
-                // ]);
+
                 onGameRound((round) => (round += 1));
-                // setPastGuesses((pastGuesses) => [
-                //     { value: guessArray[randomChoice], round: round},
-                //     ...pastGuesses,
-                // ]);
             } else {
                 Alert.alert(
                     "DON'T CHEAT",
@@ -94,19 +79,15 @@ const GameScreen = (props) => {
         if (guess === userChoice) {
             guessArray = generateGuessArray();
             randomChoice = randomIndex(guessArray);
-            // setGuess(-1);
             onGameOver(true);
             console.log("Game Over");
         }
-        // return () => {
-        //     setGuess(() => false);
-        // };
     }, [guess]);
 
     useEffect(() => {
         if (guess !== pastGuesses[0]?.value) {
             setPastGuesses((pastGuesses) => [
-                { value: guessArray[randomChoice], round: round },
+                { value: guessArray[randomChoice], round: round.toString() },
                 ...pastGuesses,
             ]);
         }
@@ -120,12 +101,6 @@ const GameScreen = (props) => {
                 {guess}
             </NumberContainer>
             <Card style={styles.card}>
-                {/* <Button
-                    title={"Lower"}
-                    onPress={() => {
-                        takeAGuess("lower");
-                    }}
-                /> */}
                 <MainButton
                     onPress={() => {
                         takeAGuess("lower");
@@ -133,12 +108,7 @@ const GameScreen = (props) => {
                 >
                     <Ionicons name="md-remove" size={24} />
                 </MainButton>
-                {/* <Button
-                    title={"Higher"}
-                    onPress={() => {
-                        takeAGuess("higher");
-                    }}
-                /> */}
+
                 <MainButton
                     onPress={() => {
                         takeAGuess("higher");
@@ -148,21 +118,20 @@ const GameScreen = (props) => {
                 </MainButton>
             </Card>
             <View style={styles.scrollViewContainer}>
-                <ScrollView contentContainerStyle={styles.scrollView}>
-                    {pastGuesses.map((pastGuess, index) => (
-                        <View
-                            key={pastGuess.round}
-                            style={styles.roundContainer}
-                        >
+                <FlatList
+                    keyExtractor={(item) => item.round}
+                    data={pastGuesses}
+                    renderItem={(itemData) => (
+                        <View style={styles.roundContainer}>
                             <Text style={styles.roundText}>
-                                #{pastGuess.round}
+                                #{itemData.item.round}
                             </Text>
                             <Text style={styles.roundText}>
-                                {pastGuess.value}
+                                {itemData.item.value}
                             </Text>
                         </View>
-                    ))}
-                </ScrollView>
+                    )}
+                />
             </View>
         </View>
     );
@@ -171,9 +140,7 @@ const GameScreen = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // borderColor: "#000000",
-        // borderWidth: 1,
-        // width: "80%",
+
         marginTop: 10,
         alignItems: "center",
         justifyContent: "center",
@@ -188,7 +155,6 @@ const styles = StyleSheet.create({
 
     numberGuessed: {
         borderRadius: 10,
-        // width: 50,
     },
 
     scrollViewContainer: {
@@ -198,9 +164,7 @@ const styles = StyleSheet.create({
 
     scrollView: {
         flexGrow: 1,
-        // flexDirection: "row",
-        // width: "75%",
-        // marginVertical: 15,
+
         justifyContent: "flex-end",
         alignItems: "center",
     },
