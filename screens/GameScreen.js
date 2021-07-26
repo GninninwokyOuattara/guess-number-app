@@ -7,7 +7,7 @@ import {
     Alert,
     ScrollView,
     FlatList,
-    Dimensions
+    Dimensions,
 } from "react-native";
 import Card from "../components/Card";
 import NumberContainer from "../components/NumberContainer";
@@ -46,6 +46,20 @@ const GameScreen = (props) => {
     const { userChoice, onGameOver, onGameRound, round } = props;
     const [guess, setGuess] = useState(guessArray[randomChoice]);
     const [pastGuesses, setPastGuesses] = useState([]);
+    const [screenHeight, setScreenHeight] = useState(
+        Dimensions.get("window").height
+    );
+
+    const changeEventHandler = () => {
+        setScreenHeight(Dimensions.get("window").height);
+    };
+
+    useEffect(() => {
+        Dimensions.addEventListener("change", changeEventHandler);
+        return () => {
+            Dimensions.removeEventListener("change");
+        };
+    }, [screenHeight]);
 
     const takeAGuess = (type) => {
         if (guessArray.length > 1) {
@@ -94,6 +108,50 @@ const GameScreen = (props) => {
         }
         console.log(pastGuesses);
     }, [round]);
+
+    if (screenHeight < 500) {
+        return (
+            <View style={styles.container}>
+                <Text>Opponent's guess : </Text>
+                <View style={styles.control}>
+                    <MainButton
+                        onPress={() => {
+                            takeAGuess("lower");
+                        }}
+                    >
+                        <Ionicons name="md-remove" size={24} />
+                    </MainButton>
+                    <NumberContainer style={styles.numberGuessed}>
+                        {guess}
+                    </NumberContainer>
+
+                    <MainButton
+                        onPress={() => {
+                            takeAGuess("higher");
+                        }}
+                    >
+                        <Ionicons name="md-add" size={24} />
+                    </MainButton>
+                </View>
+                <View style={styles.scrollViewContainer}>
+                    <FlatList
+                        keyExtractor={(item) => item.round}
+                        data={pastGuesses}
+                        renderItem={(itemData) => (
+                            <View style={styles.roundContainer}>
+                                <Text style={styles.roundText}>
+                                    #{itemData.item.round}
+                                </Text>
+                                <Text style={styles.roundText}>
+                                    {itemData.item.value}
+                                </Text>
+                            </View>
+                        )}
+                    />
+                </View>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -169,7 +227,10 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end",
         alignItems: "center",
     },
-
+    control: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
     roundContainer: {
         width: "100%",
         height: 40,
