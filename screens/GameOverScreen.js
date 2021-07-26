@@ -1,40 +1,56 @@
-import React from "react";
-import { View, Text, StyleSheet, Button, Image } from "react-native";
+import React, { useState } from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+    Button,
+    Image,
+    Dimensions,
+    ScrollView,
+} from "react-native";
 import MainButton from "../components/MainButton";
 import Color from "../constants/colors";
 
 const GameOverScreen = (props) => {
+    const [screenWidth, setScreenWidth] = useState(
+        Dimensions.get("window").width
+    );
+
     return (
-        <View style={styles.screen}>
-            <Text style={styles.textContainer}>Game Over</Text>
-            <View style={styles.imageContainer}>
-                {/* <Image
+        <ScrollView>
+            <View style={styles.screen}>
+                <Text style={styles.textContainer}>Game Over</Text>
+                <View style={styles.imageContainer}>
+                    {/* <Image
                     source={require("../assets/success.png")}
                     style={styles.image}
                     resizeMode="cover"
                 /> */}
-                <Image
-                    source={{
-                        uri:
-                            "https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_1920,f_auto/A-Alamy-BXWK5E_vvmkuf.jpg",
-                    }}
-                    style={styles.image}
-                    resizeMode="cover"
-                />
-            </View>
-            {/* <Text>In {props.roundNumber}</Text>
+                    <Image
+                        source={{
+                            uri: "https://res.cloudinary.com/dk-find-out/image/upload/q_80,w_1920,f_auto/A-Alamy-BXWK5E_vvmkuf.jpg",
+                        }}
+                        style={styles.image}
+                        resizeMode="cover"
+                    />
+                </View>
+                {/* <Text>In {props.roundNumber}</Text>
             <Text>The number was {props.number}</Text> */}
-            <View style={styles.resultContainer}>
-                <Text style={styles.textContainer}>
-                    Your phone guessed the right number{" "}
-                    <Text style={styles.highlight}>{props.number}</Text> after{" "}
-                    <Text style={styles.highlight}>{props.roundNumber} </Text>{" "}
-                    round
-                </Text>
+                <View style={styles.resultContainer}>
+                    <Text style={styles.textContainer}>
+                        Your phone guessed the right number{" "}
+                        <Text style={styles.highlight}>{props.number}</Text>{" "}
+                        after{" "}
+                        <Text style={styles.highlight}>
+                            {props.roundNumber}{" "}
+                        </Text>{" "}
+                        round
+                    </Text>
+                </View>
+                {/* <Button title="NEW GAME" onPress={props.onNewGame} /> */}
+                <MainButton onPress={props.onNewGame}>NEW GAME</MainButton>
             </View>
-            {/* <Button title="NEW GAME" onPress={props.onNewGame} /> */}
-            <MainButton onPress={props.onNewGame}>NEW GAME</MainButton>
-        </View>
+        </ScrollView>
     );
 };
 
@@ -48,8 +64,8 @@ const styles = {
     },
 
     imageContainer: {
-        width: "80%",
-        height: 300,
+        width: Dimensions.get("window").width < 600 ? "80%" : 200,
+        height: Dimensions.get("window").width < 600 ? "100%" : 200,
         borderWidth: 2,
         borderRadius: 150,
         overflow: "hidden",
