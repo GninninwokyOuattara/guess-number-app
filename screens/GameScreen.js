@@ -229,7 +229,9 @@ const styles = StyleSheet.create({
     },
     control: {
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "space-around",
+        alignItems: "center",
+        width: "80%",
     },
     roundContainer: {
         width: "100%",
