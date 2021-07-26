@@ -7,6 +7,7 @@ import {
     Alert,
     ScrollView,
     FlatList,
+    Dimensions
 } from "react-native";
 import Card from "../components/Card";
 import NumberContainer from "../components/NumberContainer";
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
 
-        marginTop: 10,
+        marginTop: Dimensions.get("window").height > 600 ? 20 : 10,
         alignItems: "center",
         justifyContent: "center",
     },
