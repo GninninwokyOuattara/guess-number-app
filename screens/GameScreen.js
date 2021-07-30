@@ -35,14 +35,6 @@ let guessArray = generateGuessArray();
 let randomChoice = randomIndex(guessArray);
 
 const GameScreen = (props) => {
-    console.log(
-        "[",
-        guessArray[0],
-        "...",
-        guessArray[guessArray.length - 1],
-        "]"
-    );
-
     const { userChoice, onGameOver, onGameRound, round } = props;
     const [guess, setGuess] = useState(guessArray[randomChoice]);
     const [pastGuesses, setPastGuesses] = useState([]);
@@ -86,7 +78,6 @@ const GameScreen = (props) => {
                 );
             }
         } else {
-            console.log("WTF");
         }
     };
 
@@ -95,7 +86,6 @@ const GameScreen = (props) => {
             guessArray = generateGuessArray();
             randomChoice = randomIndex(guessArray);
             onGameOver(true);
-            console.log("Game Over");
         }
     }, [guess]);
 
@@ -106,7 +96,6 @@ const GameScreen = (props) => {
                 ...pastGuesses,
             ]);
         }
-        console.log(pastGuesses);
     }, [round]);
 
     if (screenHeight < 500) {
